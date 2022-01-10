@@ -1,2 +1,5 @@
 input/*.m4a
 input/tracks.json
+
+*.zip
+index.html
