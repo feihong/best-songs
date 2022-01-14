@@ -1,9 +1,8 @@
-from pathlib import Path
-import json
-
 from jinja2 import Template
 
-tracks = json.loads(Path('input/tracks.json').read_bytes())
+from util import tracks
+
+
 output_file = Path('index.html')
 
 tmpl = Template("""

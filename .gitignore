@@ -1,4 +1,8 @@
+__pycache__
+
 input/*.m4a
+input/*.jpg
+input/*.png
 input/tracks.json
 
 *.zip
