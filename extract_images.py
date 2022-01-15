@@ -1,9 +1,10 @@
-from pathlib import Path
+"""
+Extract cover art images and for each image, generate a resized copy
+"""
 import subprocess
-
 import mutagen.mp4
+from util import tracks
 
-from util import input_dir, tracks
 
 for track in tracks:
   print(track['path'])
