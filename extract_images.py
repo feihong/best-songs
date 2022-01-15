@@ -5,27 +5,17 @@ import mutagen.mp4
 
 from util import input_dir, tracks
 
-ext_map = {
-  mutagen.mp4.MP4Cover.FORMAT_JPEG: '.jpg',
-  mutagen.mp4.MP4Cover.FORMAT_PNG: '.png',
-}
-
 for track in tracks:
-  path = input_dir / Path(track['location'])
-  mp4 = mutagen.mp4.MP4(str(path))
-  covr = mp4['covr'][0]
-  ext = ext_map[covr.imageformat]
-  image_file = path.with_suffix(ext)
-  image_file.write_bytes(covr)
+  print(track['path'])
+  mp4 = mutagen.mp4.MP4(str(track['path']))
+  track['image_file'].write_bytes(mp4['covr'][0])
 
-  resized_file = input_dir / (image_file.stem + '-resized' + image_file.suffix)
-  print(resized_file)
   subprocess.run([
     'convert',
-    image_file,
-    '-resize', '800x600',
+    track['image_file'],
+    '-resize', '426x240',
     '-background', 'black',
     '-gravity', 'center',
-    '-extent', '800x600',
-    resized_file,
+    '-extent', '426x240',
+    track['resized_image_file'],
   ])
