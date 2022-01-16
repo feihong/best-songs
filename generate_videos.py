@@ -20,10 +20,12 @@ def make_video(track):
     '-i', track['captioned_image_file'],
     '-i', track['path'],
     '-t', str(duration),
-    '-filter:v', f'fade=in;st=0:d=2, fade=out:st={duration-2}:d=2',
+    '-filter:v', f'fade=in:st=0:d=2, fade=out:st={duration-2}:d=2',
     '-filter:a', f'afade=out:st={duration-2}:d=2',
-    # '-c:a', 'copy', # copy audio, don't re-encode
+    # '-c:a', 'copy', # you cannot use streamcopy when you use filters
     '-c:v', 'libx264',
+    "-c:a", "libfdk_aac", # use best encoder
+    "-vbr", "4", # use high quality (5 is highest)
     '-crf', '20',
     '-pix_fmt', 'yuv420p',
     '-shortest',
