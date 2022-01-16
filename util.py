@@ -27,4 +27,4 @@ for track in tracks:
   track['image_file'] = image_file
   track['resized_image_file'] = input_dir / (image_file.stem + '-resized' + image_file.suffix)
   track['captioned_image_file'] = input_dir / (image_file.stem + '-captioned' + image_file.suffix)
-  track['output_file'] = output_dir / (path.stem + '.mp4')
+  track['video_file'] = output_dir / (path.stem + '.mp4')
