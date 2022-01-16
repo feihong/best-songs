@@ -5,4 +5,4 @@ page:
 	python generate_page.py
 
 clean:
-  rm output/*.txt; rm output/*.mp4
+	rm output/*.txt; rm output/*.mp4
