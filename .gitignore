@@ -8,4 +8,5 @@ input/tracks.json
 *.zip
 index.html
 
-*.mp4
+output/*.txt
+output/*.mp4
