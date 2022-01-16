@@ -1,9 +1,12 @@
 """
-Extract cover art images and for each image, generate a resized copy
+Extract cover art images and for each image, generate resized and captioned copies
 """
 import subprocess
 import mutagen.mp4
 from util import tracks
+
+
+dimensions = '640x360' # 360p
 
 
 for track in tracks:
@@ -15,21 +18,21 @@ for track in tracks:
   subprocess.run([
     'convert',
     track['image_file'],
-    '-resize', '426x240',
+    '-resize', dimensions,
     '-background', 'black',
     '-gravity', 'center',
-    '-extent', '426x240', # 240p
+    '-extent', dimensions,
     track['resized_image_file'],
   ])
 
-  # Add text to resized image
+  # Caption resized image
   # https://legacy.imagemagick.org/Usage/annotating/
   subprocess.run([
     'convert',
     '-background', '#0008',
     '-fill', 'white',
     '-gravity', 'center',
-    '-size', '426x40',
+    '-size', '640x80',
     '-font', 'WenQuanYi-Zen-Hei', # run `identify -list font` to find an appropriate font
     f"caption:{track['title']}\n{track['artist']}",
     track['resized_image_file'],
