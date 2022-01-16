@@ -16,7 +16,8 @@ ext_map = {
 tracks = json.loads((input_dir / 'tracks.json').read_bytes())
 
 # Add more metadata
-for track in tracks:
+for i, track in enumerate(tracks, 1):
+  track['number'] = i
   path = input_dir / Path(track['location'])
   track['path'] = path
 
