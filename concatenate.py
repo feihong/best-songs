@@ -4,7 +4,9 @@ Concatenate individual track videos into one big video
 from pathlib import Path
 import itertools
 import subprocess
+import ffmpeg
 from util import output_dir, tracks
+
 
 title = '2021年度最值得听的歌曲'
 
@@ -12,19 +14,14 @@ def grouper(iterable, n, fillvalue=None):
     args = [iter(iterable)] * n
     return itertools.zip_longest(*args, fillvalue=fillvalue)
 
-def get_group_text(group):
-  def get_safe_name(path): return path.name.replace("'", r"'\''")
-  return '\n'.join(f"file '{get_safe_name(track['video_file'])}'" for track in group)
-
 for i, group in enumerate(grouper(tracks, 10), 1):
-  print(f'Group {i}')
-  group_txt_file = output_dir / f'group-{i}.txt'
-  group_txt_file.write_text(get_group_text(group))
+  if i != 4: continue
+  group_title = f'{title} Part {i}'
+  print(group_title)
+  group_video_file = output_dir / f'{group_title}.mp4'
 
   for track in group:
     print(' ', track['video_file'])
-
-  group_title = f'{title} Part {i}'
 
   comment_lines = [
     group_title,
@@ -33,19 +30,20 @@ for i, group in enumerate(grouper(tracks, 10), 1):
   ]
   comment = '\n\n'.join(comment_lines)
 
-  group_video_file = output_dir / f'{group_title}.mp4'
   if group_video_file.exists():
     continue
 
+  inputs = itertools.chain.from_iterable(('-i', track['video_file']) for track in group)
+  filter_complex = ' '.join(f'[{i}:v] [{i}:a]' for i in range(len(group))) + ' concat=n=10:v=1:a=1 [vv] [aa]'
+
   cmd = [
     'ffmpeg',
-    '-y',
-    '-f', 'concat',
-    '-safe', '0',
-    '-i', group_txt_file,
-    '-c', 'copy',
+  ] + list(inputs) + [
+    '-filter_complex', filter_complex,
+    '-map', '[vv]',
+    '-map', '[aa]',
     '-metadata', f'comment={comment}',
-    group_video_file,
+    'output/2021年度最值得听的歌曲 Part 4.mp4'
   ]
-  print(' '.join(str(s) for s in cmd))
+  print(cmd)
   subprocess.run(cmd)
