@@ -4,11 +4,14 @@ Generate a video for each track.
 import subprocess
 from util import tracks
 
-duration = 3 * 60
+max_duration = 3 * 60
 
+# https://video.stackexchange.com/a/23109
 def make_video(track):
   if track['video_file'].exists():
     return
+
+  duration = min(max_duration, track['duration'])
 
   cmd = [
     'ffmpeg',
@@ -17,7 +20,7 @@ def make_video(track):
     '-i', track['captioned_image_file'],
     '-i', track['path'],
     '-t', str(duration),
-    '-filter:v', f'fade=out:st={duration-2}:d=2',
+    '-filter:v', f'fade=in;st=0:d=2, fade=out:st={duration-2}:d=2',
     '-filter:a', f'afade=out:st={duration-2}:d=2',
     # '-c:a', 'copy', # copy audio, don't re-encode
     '-c:v', 'libx264',

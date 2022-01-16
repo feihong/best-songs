@@ -21,6 +21,7 @@ for track in tracks:
   track['path'] = path
 
   mp4 = mutagen.mp4.MP4(str(path))
+  track['duration'] = mp4.info.length
   covr = mp4['covr'][0]
   ext = ext_map[covr.imageformat]
   image_file = path.with_suffix(ext)
