@@ -6,14 +6,15 @@ import itertools
 import subprocess
 from util import output_dir, tracks
 
-title = '2022年度最值得听的歌曲'
+title = '2021年度最值得听的歌曲'
 
 def grouper(iterable, n, fillvalue=None):
     args = [iter(iterable)] * n
     return itertools.zip_longest(*args, fillvalue=fillvalue)
 
 def get_group_text(group):
-  return '\n'.join(f"file '{track['video_file'].name}'" for track in group)
+  def get_safe_name(path): return path.name.replace("'", r"'\''")
+  return '\n'.join(f"file '{get_safe_name(track['video_file'])}'" for track in group)
 
 for i, group in enumerate(grouper(tracks, 10), 1):
   print(f'Group {i}')
@@ -33,6 +34,9 @@ for i, group in enumerate(grouper(tracks, 10), 1):
   comment = '\n\n'.join(comment_lines)
 
   group_video_file = output_dir / f'{group_title}.mp4'
+  if group_video_file.exists():
+    continue
+
   cmd = [
     'ffmpeg',
     '-y',
