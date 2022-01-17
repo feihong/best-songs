@@ -7,5 +7,8 @@ page:
 images:
 	python extract_images.py
 
+videos:
+	python generate_videos.py
+
 clean:
 	rm output/*.txt; rm output/*.mp4

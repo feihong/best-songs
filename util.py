@@ -13,6 +13,8 @@ ext_map = {
   mutagen.mp4.MP4Cover.FORMAT_PNG: '.png',
 }
 
+max_duration = 3 * 60  # must be no longer than 3 minutes
+
 tracks = json.loads((input_dir / 'tracks.json').read_bytes())
 
 # Add more metadata
@@ -22,7 +24,7 @@ for i, track in enumerate(tracks, 1):
   track['path'] = path
 
   mp4 = mutagen.mp4.MP4(str(path))
-  track['duration'] = mp4.info.length
+  track['duration'] = min(max_duration, mp4.info.length)
   covr = mp4['covr'][0]
   ext = ext_map[covr.imageformat]
   image_file = path.with_suffix(ext)
