@@ -29,7 +29,15 @@ def get_comment(group_title, tracks):
 def get_inputs(tracks):
   for track in tracks:
     yield ffmpeg.input(str(track['video_file'])).video  # should already be trimmed
-    yield ffmpeg.input(str(track['path'])).audio.filter('atrim', duration=track['duration'])
+
+    yield (
+      ffmpeg
+      .input(str(track['path']))
+      .audio
+      .filter('atrim', duration=track['duration'])
+      .filter('afade', t='in', st=0, d=3)
+      .filter('afade', t='out', st=track['duration'] - 3, d=3)
+    )
 
 for i, group in enumerate(grouper(tracks, 10), 1):
   group_title = f'{title} Part {i}'
@@ -42,7 +50,10 @@ for i, group in enumerate(grouper(tracks, 10), 1):
   stream = (
     ffmpeg
     .concat(*get_inputs(group), v=1, a=1)
-    .output(str(group_video_file), metadata=f'comment={get_comment(group_title, group)}')
+    .output(str(group_video_file),
+            acodec='libfdk_aac', # use best encoder
+            vbr=4, # use high quality (5 is highest)'
+            metadata=f'comment={get_comment(group_title, group)}')
   )
   print(stream.compile())
   stream.run()

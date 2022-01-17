@@ -7,4 +7,6 @@
 - [x] Concatenate single-track videos into larger videos
 - [x] Use filter_complex to concat videos for more predictable results
 - [x] Add some basic styling to generated page
+- [ ] Round duration down to closest second
+- [ ] Consider replacing the generate_videos with additional filters in concatenate
 - [ ] Allow page to be generated from markdown
