@@ -13,9 +13,12 @@ tmpl = Template("""
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
     <style>
-      body {
+      html {
         font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         font-size: 14px;
+      }
+      .big {
+        font-size: 1.5em;
       }
     </style>
   </head>
@@ -29,7 +32,12 @@ tmpl = Template("""
     </p>
     <ol>
     {% for track in tracks %}
-      <li> <a href="{{ track['comments'] }}" target="_blank"> {{ track['title'] }} </a> ✪ {{ track['artist'] }} </li>
+      <li>
+        <span class="big">
+          <a href="{{ track['comments'] }}" target="_blank">{{ track['title'] }}</a>
+        </span>
+        ✪ {{ track['artist'] }}
+      </li>
     {% endfor %}
     </ol>
   </body>
