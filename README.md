@@ -16,4 +16,9 @@ Generate videos and web page from collection of music files.
 
 ## Notes
 
-When concatenating MP4 files, you can't get predictable results without using [concat filter](http://trac.ffmpeg.org/wiki/Concatenate#filter). Previous attempts to use [concat demuxer](http://trac.ffmpeg.org/wiki/Concatenate#demuxer) would sometimes work but fail miserably depending on the input files (audio and video would be out of sync). Surprisingly, [ffmpeg-python](https://github.com/kkroening/ffmpeg-python) was not helpful in constructing the ffmpeg command, so I ended up doing it manually.
+When concatenating MP4 files, you can't get predictable results without using [concat filter](http://trac.ffmpeg.org/wiki/Concatenate#filter). Previous attempts to use [concat demuxer](http://trac.ffmpeg.org/wiki/Concatenate#demuxer) would sometimes work but fail miserably depending on the input files (audio and video would be out of sync).
+
+You can't use `-acodec copy` when using `-filter_complex`. You'll get this error:
+
+    Streamcopy requested for output stream 0:0, which is fed from a complex filtergraph. Filtering and streamcopy cannot be used together.
+
