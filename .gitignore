@@ -6,7 +6,7 @@ input/*.png
 input/tracks.json
 
 *.zip
-index.html
+*.html
 
 output/*.txt
 output/*.mp4
